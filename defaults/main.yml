@@ -1,0 +1,130 @@
+---
+# These variables correspond with the STIG IDs defined in the Kubernetes STIG and allow you to enable/disable specific rules.
+
+# 95 total
+rule_cntr_k8_003320: true
+rule_cntr_k8_001300: true
+rule_cntr_k8_003330: true
+rule_cntr_k8_003340: true
+rule_cntr_k8_003300: true
+rule_cntr_k8_003350: true
+rule_cntr_k8_003310: true
+rule_cntr_k8_002011: true
+rule_cntr_k8_002620: true
+rule_cntr_k8_002001: true
+rule_cntr_k8_002630: true
+rule_cntr_k8_002640: true
+rule_cntr_k8_000170: true
+rule_cntr_k8_000270: true
+rule_cntr_k8_000320: true
+rule_cntr_k8_000360: true
+rule_cntr_k8_000410: true
+rule_cntr_k8_000450: true
+rule_cntr_k8_000610: true
+rule_cntr_k8_000880: true
+rule_cntr_k8_000920: true
+rule_cntr_k8_000960: true
+rule_cntr_k8_001410: true
+rule_cntr_k8_001450: true
+rule_cntr_k8_001490: true
+rule_cntr_k8_001530: true
+rule_cntr_k8_001990: true
+rule_cntr_k8_002700: true
+rule_cntr_k8_003130: true
+rule_cntr_k8_003170: true
+rule_cntr_k8_003210: true
+rule_cntr_k8_003250: true
+rule_cntr_k8_003290: true
+rule_cntr_k8_000180: true
+rule_cntr_k8_000290: true
+rule_cntr_k8_000330: true
+rule_cntr_k8_000370: true
+rule_cntr_k8_000420: true
+rule_cntr_k8_000460: true
+rule_cntr_k8_000700: true
+rule_cntr_k8_000890: true
+rule_cntr_k8_000930: true
+rule_cntr_k8_001160: true
+rule_cntr_k8_001420: true
+rule_cntr_k8_001460: true
+rule_cntr_k8_001500: true
+rule_cntr_k8_001540: true
+rule_cntr_k8_002000: true
+rule_cntr_k8_002720: true
+rule_cntr_k8_003140: true
+rule_cntr_k8_003180: true
+rule_cntr_k8_003220: true
+rule_cntr_k8_003260: true
+rule_cntr_k8_000150: true
+rule_cntr_k8_000190: true
+rule_cntr_k8_000300: true
+rule_cntr_k8_000340: true
+rule_cntr_k8_000380: true
+rule_cntr_k8_000430: true
+rule_cntr_k8_000470: true
+rule_cntr_k8_000850: true
+rule_cntr_k8_000900: true
+rule_cntr_k8_000940: true
+rule_cntr_k8_001360: true
+rule_cntr_k8_001430: true
+rule_cntr_k8_001470: true
+rule_cntr_k8_001510: true
+rule_cntr_k8_001550: true
+rule_cntr_k8_002010: true
+rule_cntr_k8_003110: true
+rule_cntr_k8_003150: true
+rule_cntr_k8_003190: true
+rule_cntr_k8_003230: true
+rule_cntr_k8_003270: true
+rule_cntr_k8_000160: true
+rule_cntr_k8_000220: true
+rule_cntr_k8_000310: true
+rule_cntr_k8_000350: true
+rule_cntr_k8_000400: true
+rule_cntr_k8_000440: true
+rule_cntr_k8_000600: true
+rule_cntr_k8_000860: true
+rule_cntr_k8_000910: true
+rule_cntr_k8_000950: true
+rule_cntr_k8_001400: true
+rule_cntr_k8_001440: true
+rule_cntr_k8_001480: true
+rule_cntr_k8_001520: true
+rule_cntr_k8_001620: true
+rule_cntr_k8_002600: true
+rule_cntr_k8_003120: true
+rule_cntr_k8_003160: true
+rule_cntr_k8_003200: true
+rule_cntr_k8_003240: true
+rule_cntr_k8_003280: true
+
+# STIG Paths
+# kubelet paths
+kubelet_certificate_authority_path: /etc/kubernetes/pki/ca.crt
+kubelet_config_path: /var/lib/kubelet/config.yaml
+kubelet_service_path: /lib/systemd/system/kubelet.service.d/10-kubeadm.conf
+kubelet_sysconfig_path: /etc/sysconfig/kubelet
+
+# Kubeconfigs
+kube_proxy_kubeconfig_path: /etc/kubernetes/proxy.conf
+kubelet_kubeconfig_path: /etc/kubernetes/kubelet.conf
+admin_kubeconfig_path: /etc/kubernetes/admin.conf
+
+# Manifest Paths
+controller_manager_manifest_path: /etc/kubernetes/manifests/kube-controller-manager.yaml
+api_server_manifest_path: /etc/kubernetes/manifests/kube-apiserver.yaml
+scheduler_manifest_path: /etc/kubernetes/manifests/kube-scheduler.yaml
+etcd_manifest_path: /etc/kubernetes/manifests/etcd.yaml
+
+# directories
+pki_crt_dir: /etc/kubernetes/pki
+pki_keys_dir: /etc/kubernetes/pki
+manifests_dir: /etc/kubernetes/manifests
+conf_dir: /etc/kubernetes
+etcd_dir: /var/lib/etcd
+pki_dir: /etc/kubernetes/pki
+
+# Extra files
+api_server_audit_policy_path: /etc/kubernetes/audit-policy.yaml
+pod_security_policy_path: /etc/kubernetes/manifests/pod-security-policy.yaml
+admission_control_config_path: /etc/kubernetes/admission-control-config.yaml

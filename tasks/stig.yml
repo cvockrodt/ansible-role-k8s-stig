@@ -1,0 +1,1418 @@
+- name: CNTR-K8-000150 | medium | The Kubernetes Controller Manager must use TLS 1.2,
+    at a minimum, to protect the confidentiality of sensitive data during electronic
+    dissemination.
+  when: rule_cntr_k8_000150
+  tags:
+    - rule_CNTR_K8_000150
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ controller_manager_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-min-version=(?!.*VersionTLS12.*)$)
+    line: \1,VersionTLS12
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000160 | medium | The Kubernetes Scheduler must use TLS 1.2, at a
+    minimum, to protect the confidentiality of sensitive data during electronic dissemination.
+  when: rule_cntr_k8_000160
+  tags:
+    - rule_CNTR_K8_000160
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ scheduler_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-min-version=(?!.*VersionTLS12.*)$)
+    line: \1,VersionTLS12
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000170 | medium | The Kubernetes API Server must use TLS 1.2, at a
+    minimum, to protect the confidentiality of sensitive data during electronic dissemination.
+  when: rule_cntr_k8_000170
+  tags:
+    - rule_CNTR_K8_000170
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-min-version=(?!.*VersionTLS12.*)$)
+    line: \1,VersionTLS12
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000180 | medium | The Kubernetes etcd must use TLS to protect the
+    confidentiality of sensitive data during electronic dissemination.
+  when: rule_cntr_k8_000180
+  tags:
+    - rule_CNTR_K8_000180
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --auto-tls=(?!.*false.*)$)
+    line: \1,false
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000190 | medium | The Kubernetes etcd must use TLS to protect the
+    confidentiality of sensitive data during electronic dissemination.
+  when: rule_cntr_k8_000190
+  tags:
+    - rule_CNTR_K8_000190
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --peer-auto-tls=(?!.*false.*)$)
+    line: \1,false
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000220 | high | The Kubernetes Controller Manager must create unique
+    service accounts for each work payload.
+  when: rule_cntr_k8_000220
+  tags:
+    - rule_CNTR_K8_000220
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ controller_manager_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --use-service-account-credentials=(?!.*true.*)$)
+    line: \1,true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000270 | medium | The Kubernetes API Server must enable Node,RBAC
+    as the authorization mode.
+  when: rule_cntr_k8_000270
+  tags:
+    - rule_CNTR_K8_000270
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --authorization-mode=(?!.*Node,RBAC.*)$)
+    line: \1,Node,RBAC
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000300 | medium | The Kubernetes Scheduler must have secure binding.
+  when: rule_cntr_k8_000300
+  tags:
+    - rule_CNTR_K8_000300
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ scheduler_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --bind-address=(?!.*127.0.0.1.*)$)
+    line: \1,127.0.0.1
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000310 | medium | The Kubernetes Controller Manager must have secure
+    binding.
+  when: rule_cntr_k8_000310
+  tags:
+    - rule_CNTR_K8_000310
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ controller_manager_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --bind-address=(?!.*127.0.0.1.*)$)
+    line: \1,127.0.0.1
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000320 | high | The Kubernetes API server must have the insecure port
+    flag disabled.
+  when: rule_cntr_k8_000320
+  tags:
+    - rule_CNTR_K8_000320
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --insecure-port=(?!.*0.*)$)
+    line: \1,0
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000330 | high | The Kubernetes Kubelet must have the read-only port
+    flag disabled.
+  when: rule_cntr_k8_000330
+  tags:
+    - rule_CNTR_K8_000330
+    - worker
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- readOnlyPort=(?!.*0.*)$)
+    line: \1,0
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000331 | high | The Kubernetes Kubelet must have the read-only port
+    flag disabled.
+  when: rule_cntr_k8_000331
+  tags:
+    - rule_CNTR_K8_000331
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_service_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --read-only-port=(?!.*0.*)$)
+    line: \1,0
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000340 | high | The Kubernetes API server must have the insecure bind
+    address not set.
+  when: rule_cntr_k8_000340
+  tags:
+    - rule_CNTR_K8_000340
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    state: absent
+    regexp: ^(\s+- --insecure-bind-address=.*$
+- name: CNTR-K8-000350 | medium | The Kubernetes API server must have the secure port
+    set.
+  when: rule_cntr_k8_000350
+  tags:
+    - rule_CNTR_K8_000350
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --secure-port=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000360 | high | The Kubernetes API server must have anonymous authentication
+    disabled.
+  when: rule_cntr_k8_000360
+  tags:
+    - rule_CNTR_K8_000360
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --anonymous-auth=(?!.*false.*)$)
+    line: \1,false
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000370 | high | The Kubernetes Kubelet must have anonymous authentication
+    disabled.
+  when: rule_cntr_k8_000370
+  tags:
+    - rule_CNTR_K8_000370
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: '^(\s+- authentication: anonymous: enabled=(?!.*false.*)$)'
+    line: \1,false
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000371 | high | The Kubernetes Kubelet must have anonymous authentication
+    disabled.
+  when: rule_cntr_k8_000371
+  tags:
+    - rule_CNTR_K8_000371
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_service_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --anonymous-auth=(?!.*false.*)$)
+    line: \1,false
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000380 | high | The Kubernetes kubelet must enable explicit authorization.
+  when: rule_cntr_k8_000380
+  tags:
+    - rule_CNTR_K8_000380
+    - worker
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: '^(\s+- authorization: mode=(?!.*Webhook.*)$)'
+    line: \1,Webhook
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000381 | high | The Kubernetes kubelet must enable explicit authorization.
+  when: rule_cntr_k8_000381
+  tags:
+    - rule_CNTR_K8_000381
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_service_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --authorization-mode=(?!.*Webhook.*)$)
+    line: \1,Webhook
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000430 | medium | Kubernetes Kubectl cp command must give expected
+    access and results.
+  when: rule_cntr_k8_000430
+  tags:
+    - rule_CNTR_K8_000430
+    - worker
+  ansible.builtin.yum:
+    name: '{{ packages }}'
+    state: latest
+    update_only: true
+    update_cache: true
+  vars:
+    packages:
+      - kubectl
+- name: CNTR-K8-000440 | high | The Kubernetes kubelet static PodPath must not enable
+    static pods.
+  when: rule_cntr_k8_000440
+  tags:
+    - rule_CNTR_K8_000440
+    - worker
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    state: absent
+    regexp: ^(\s+- staticPodPath=.*$
+- name: CNTR-K8-000450 | medium | Kubernetes DynamicAuditing must not be enabled.
+  when: rule_cntr_k8_000450
+  tags:
+    - rule_CNTR_K8_000450
+    - control_plane
+    - worker
+  block:
+    - name: CNTR-K8-000450 | API Server | Kubernetes DynamicAuditing must not be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ controller_manager_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicAuditing=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000450 | API Server | Kubernetes DynamicAuditing must not be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ api_server_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicAuditing=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000450 | API Server | Kubernetes DynamicAuditing must not be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ scheduler_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicAuditing=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000450 | API Server | Kubernetes DynamicAuditing must not be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ etcd_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicAuditing=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+- name: CNTR-K8-000460 | medium | Kubernetes DynamicKubeletConfig must not be enabled.
+  when: rule_cntr_k8_000460
+  tags:
+    - rule_CNTR_K8_000460
+    - control_plane
+    - worker
+  block:
+    - name: CNTR-K8-000460 | API Server | Kubernetes DynamicKubeletConfig must not
+        be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ controller_manager_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicKubeletConfig=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000460 | API Server | Kubernetes DynamicKubeletConfig must not
+        be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ api_server_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicKubeletConfig=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000460 | API Server | Kubernetes DynamicKubeletConfig must not
+        be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ scheduler_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicKubeletConfig=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000460 | API Server | Kubernetes DynamicKubeletConfig must not
+        be enabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ etcd_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- DynamicKubeletConfig=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+- name: CNTR-K8-000470 | medium | The Kubernetes API server must have Alpha APIs disabled.
+  when: rule_cntr_k8_000470
+  tags:
+    - rule_CNTR_K8_000470
+    - control_plane
+  block:
+    - name: CNTR-K8-000470 | API Server | The Kubernetes API server must have Alpha
+        APIs disabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ controller_manager_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- AllAlpha=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000470 | API Server | The Kubernetes API server must have Alpha
+        APIs disabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ api_server_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- AllAlpha=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000470 | API Server | The Kubernetes API server must have Alpha
+        APIs disabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ scheduler_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- AllAlpha=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+    - name: CNTR-K8-000470 | API Server | The Kubernetes API server must have Alpha
+        APIs disabled.
+      ansible.builtin.lineinfile:
+        dest: '{{ etcd_manifest_path }}'
+        backup: true
+        backrefs: true
+        state: present
+        regexp: ^(\s+- AllAlpha=(?!.*false.*)$)
+        line: \1,false
+        insertafter: ^\s+- etcd$
+- name: CNTR-K8-000600 | medium | The Kubernetes API Server must have an audit policy
+    set.
+  when: rule_cntr_k8_000600
+  tags:
+    - rule_CNTR_K8_000600
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --audit-policy-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000610 | medium | The Kubernetes API Server must have an audit log
+    path set.
+  when: rule_cntr_k8_000610
+  tags:
+    - rule_CNTR_K8_000610
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --audit-log-path=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-000700 | medium | Kubernetes API Server must generate audit records
+    that identify what type of event has occurred, identify the source of the event,
+    contain the event results, identify any users, and identify any containers associated
+    with the event.
+  when: rule_cntr_k8_000700
+  tags:
+    - rule_CNTR_K8_000700
+    - control_plane
+  ansible.builtin.copy:
+    dest: '{{ api_server_manifest_path }}'
+    content: "# Log all requests at the\n                            RequestResponse\
+      \ level. apiVersion: audit.k8s.io/v1 kind: Policy rules: -\n               \
+      \             level: RequestResponse "
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+- name: CNTR-K8-000850 | medium | Kubernetes Kubelet must deny hostname override.
+  when: rule_cntr_k8_000850
+  tags:
+    - rule_CNTR_K8_000850
+    - worker
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    state: absent
+    regexp: ^(\s+- --hostname-override=.*$
+- name: CNTR-K8-000860 | medium | The Kubernetes manifests must be owned by root.
+  when: rule_cntr_k8_000860
+  tags:
+    - rule_CNTR_K8_000860
+    - control_plane
+  ansible.builtin.file:
+    path: '{{ manifests_dir }}'
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+- name: CNTR-K8-000880 | medium | The Kubernetes kubelet sysconfig file must be owned
+    by root.
+  when: rule_cntr_k8_000880
+  tags:
+    - rule_CNTR_K8_000880
+    - worker
+  ansible.builtin.file:
+    path: '{{ kubelet_sysconfig_path }}'
+    state: file
+    recurse: false
+    owner: root
+    group: root
+- name: CNTR-K8-000890 | medium | The Kubernetes kubelet sysconfig file must have
+    file permissions set to 644 or more restrictive.
+  when: rule_cntr_k8_000890
+  tags:
+    - rule_CNTR_K8_000890
+    - worker
+  block:
+    - name: CNTR-K8-000890 | kubelet_sysconfig_path | Find file permissions
+      ansible.builtin.command: find {{ kubelet_sysconfig_path }} -name "{{ kubelet_sysconfig_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_000890
+    - name: CNTR-K8-000890 | kubelet_sysconfig_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-000890 | kubelet_sysconfig_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-000890 | kubelet_sysconfig_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ kubelet_sysconfig_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-000900 | medium | The Kubernetes manifests must have least privileges.
+  when: rule_cntr_k8_000900
+  tags:
+    - rule_CNTR_K8_000900
+    - control_plane
+  block:
+    - name: CNTR-K8-000900 | manifests_dir | Find file permissions
+      ansible.builtin.command: find {{ manifests_dir }} -name "*" -type f -exec stat
+        -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_000900
+    - name: CNTR-K8-000900 | manifests_dir | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-000900 | manifests_dir | Assert permissions are correct
+      ansible.builtin.assert:
+        that: []
+- name: CNTR-K8-000910 | medium | Kubernetes Controller Manager must disable profiling.
+  when: rule_cntr_k8_000910
+  tags:
+    - rule_CNTR_K8_000910
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ controller_manager_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --profiling value=(?!.*false.*)$)
+    line: \1,false
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001300 | medium | Kubernetes Kubelet must not disable timeouts.
+  when: rule_cntr_k8_001300
+  tags:
+    - rule_CNTR_K8_001300
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --streaming-connection-idle-timeout=(?!.*5m.*)$)
+    line: \1,5m
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001400 | medium | The Kubernetes API server must use approved cipher
+    suites.
+  when: rule_cntr_k8_001400
+  tags:
+    - rule_CNTR_K8_001400
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-cipher-suites=(?!.*TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384.*)$)
+    line: \1,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001410 | medium | Kubernetes API Server must have the SSL Certificate
+    Authority set.
+  when: rule_cntr_k8_001410
+  tags:
+    - rule_CNTR_K8_001410
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --client-ca-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001420 | medium | Kubernetes Kubelet must have the SSL Certificate
+    Authority set.
+  when: rule_cntr_k8_001420
+  tags:
+    - rule_CNTR_K8_001420
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --client-ca-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001430 | medium | Kubernetes Controller Manager must have the SSL
+    Certificate Authority set.
+  when: rule_cntr_k8_001430
+  tags:
+    - rule_CNTR_K8_001430
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ controller_manager_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --root-ca-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001440 | medium | Kubernetes API Server must have a certificate for
+    communication.
+  when: rule_cntr_k8_001440
+  tags:
+    - rule_CNTR_K8_001440
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-cert-file" and "--tls-private-key-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001450 | medium | Kubernetes etcd must enable client authentication
+    to secure service.
+  when: rule_cntr_k8_001450
+  tags:
+    - rule_CNTR_K8_001450
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --client-cert-auth=(?!.*true.*)$)
+    line: \1,true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001460 | medium | Kubernetes Kubelet must enable tls-private-key-file
+    for client authentication to secure service.
+  when: rule_cntr_k8_001460
+  tags:
+    - rule_CNTR_K8_001460
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-private-key-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001470 | medium | Kubernetes Kubelet must enable tls-cert-file for
+    client authentication to secure service.
+  when: rule_cntr_k8_001470
+  tags:
+    - rule_CNTR_K8_001470
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- tls-cert-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001480 | medium | Kubernetes etcd must enable client authentication
+    to secure service.
+  when: rule_cntr_k8_001480
+  tags:
+    - rule_CNTR_K8_001480
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --peer-client-cert-auth=(?!.*true.*)$)
+    line: \1,true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001490 | medium | Kubernetes etcd must have a key file for secure
+    communication.
+  when: rule_cntr_k8_001490
+  tags:
+    - rule_CNTR_K8_001490
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --key-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001500 | medium | Kubernetes etcd must have a certificate for communication.
+  when: rule_cntr_k8_001500
+  tags:
+    - rule_CNTR_K8_001500
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --cert-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001510 | medium | Kubernetes etcd must have the SSL Certificate Authority
+    set.
+  when: rule_cntr_k8_001510
+  tags:
+    - rule_CNTR_K8_001510
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --etcd-cafile=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001520 | medium | Kubernetes etcd must have a certificate for communication.
+  when: rule_cntr_k8_001520
+  tags:
+    - rule_CNTR_K8_001520
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --etcd-certfile=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001530 | medium | Kubernetes etcd must have a key file for secure
+    communication.
+  when: rule_cntr_k8_001530
+  tags:
+    - rule_CNTR_K8_001530
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --etcd-keyfile=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001540 | medium | Kubernetes etcd must have peer-cert-file set for
+    secure communication.
+  when: rule_cntr_k8_001540
+  tags:
+    - rule_CNTR_K8_001540
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --peer-cert-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001550 | medium | Kubernetes etcd must have a peer-key-file set for
+    secure communication.
+  when: rule_cntr_k8_001550
+  tags:
+    - rule_CNTR_K8_001550
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ etcd_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --peer-key-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001620 | high | Kubernetes Kubelet must enable kernel protection.
+  when: rule_cntr_k8_001620
+  tags:
+    - rule_CNTR_K8_001620
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --protect-kernel-defaults=(?!.*true.*)$)
+    line: \1,true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-001990 | high | Kubernetes must prevent non-privileged users from
+    executing privileged functions to include disabling, circumventing, or altering
+    implemented security safeguards/countermeasures or the installation of patches
+    and updates.
+  when: rule_cntr_k8_001990
+  tags:
+    - rule_CNTR_K8_001990
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --authorization-mode=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002000 | high | The Kubernetes API server must have the ValidatingAdmissionWebhook
+    enabled.
+  when: rule_cntr_k8_002000
+  tags:
+    - rule_CNTR_K8_002000
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --enable-admission-plugins=(?!.*ValidatingAdmissionWebhook.*)$)
+    line: \1,ValidatingAdmissionWebhook
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002001 | high | Kubernetes must have a Pod Security Admission feature
+    gate set.
+  when: rule_cntr_k8_002001
+  tags:
+    - rule_CNTR_K8_002001
+    - control_plane
+    - worker
+  ansible.builtin.lineinfile:
+    dest: '{{ controller_manager_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --feature-gates=(?!.*PodSecurity=true.*)$)
+    line: \1,PodSecurity=true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002002 | high | Kubernetes must have a Pod Security Admission feature
+    gate set.
+  when: rule_cntr_k8_002002
+  tags:
+    - rule_CNTR_K8_002002
+  ansible.builtin.lineinfile:
+    dest: '{{ scheduler_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --feature-gates=(?!.*PodSecurity=true.*)$)
+    line: \1,PodSecurity=true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002003 | high | Kubernetes must have a Pod Security Admission feature
+    gate set.
+  when: rule_cntr_k8_002003
+  tags:
+    - rule_CNTR_K8_002003
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --feature-gates=(?!.*PodSecurity=true.*)$)
+    line: \1,PodSecurity=true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002004 | high | Kubernetes must have a Pod Security Admission feature
+    gate set.
+  when: rule_cntr_k8_002004
+  tags:
+    - rule_CNTR_K8_002004
+  ansible.builtin.lineinfile:
+    dest: '{{ kubelet_config_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --feature-gates=(?!.*PodSecurity=true.*)$)
+    line: \1,PodSecurity=true
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002011 | high | Kubernetes must have a Pod Security Admission control
+    file configured.
+  when: rule_cntr_k8_002011
+  tags:
+    - rule_CNTR_K8_002011
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --admission-control-config-file=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002600 | medium | Kubernetes API Server must configure timeouts to
+    limit attack surface.
+  when: rule_cntr_k8_002600
+  tags:
+    - rule_CNTR_K8_002600
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --request-timeout=(?!.*0.*)$)
+    line: \1,0
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002620 | high | Kubernetes API Server must disable basic authentication
+    to protect information in transit.
+  when: rule_cntr_k8_002620
+  tags:
+    - rule_CNTR_K8_002620
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    state: absent
+    regexp: ^(\s+- --basic-auth-file=.*$
+- name: CNTR-K8-002630 | medium | Kubernetes API Server must disable token authentication
+    to protect information in transit.
+  when: rule_cntr_k8_002630
+  tags:
+    - rule_CNTR_K8_002630
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    state: absent
+    regexp: ^(\s+- --token-auth-file=.*$
+- name: CNTR-K8-002640 | medium | Kubernetes endpoints must use approved organizational
+    certificate and key pair to protect information in transit.
+  when: rule_cntr_k8_002640
+  tags:
+    - rule_CNTR_K8_002640
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --kubelet-client-certificate" and "--kubelet-client-key=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-002720 | medium | Kubernetes must contain the latest updates as authorized
+    by IAVMs, CTOs, DTMs, and STIGs.
+  when: rule_cntr_k8_002720
+  tags:
+    - rule_CNTR_K8_002720
+    - control_plane
+  ansible.builtin.yum:
+    name: '{{ packages }}'
+    state: latest
+    update_only: true
+    update_cache: true
+  vars:
+    packages:
+      - kubelet
+      - kubeadm
+      - kubectl
+- name: CNTR-K8-003110 | medium | The Kubernetes component manifests must be owned
+    by root.
+  when: rule_cntr_k8_003110
+  tags:
+    - rule_CNTR_K8_003110
+    - control_plane
+  ansible.builtin.file:
+    path: '{{ manifests_dir }}'
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+- name: CNTR-K8-003120 | medium | The Kubernetes component etcd must be owned by etcd.
+  when: rule_cntr_k8_003120
+  tags:
+    - rule_CNTR_K8_003120
+    - control_plane
+  ansible.builtin.file:
+    path: '{{ etcd_dir }}'
+    state: directory
+    recurse: true
+    owner: etcd
+    group: etcd
+- name: CNTR-K8-003130 | medium | The Kubernetes conf files must be owned by root.
+  when: rule_cntr_k8_003130
+  tags:
+    - rule_CNTR_K8_003130
+    - control_plane
+  ansible.builtin.file:
+    path: '{{ conf_dir }}'
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+- name: CNTR-K8-003140 | medium | The Kubernetes Kube Proxy kubeconfig must have file
+    permissions set to 644 or more restrictive.
+  when: rule_cntr_k8_003140
+  tags:
+    - rule_CNTR_K8_003140
+    - control_plane
+    - proxy
+  block:
+    - name: CNTR-K8-003140 | kube_proxy_kubeconfig_path | Find file permissions
+      ansible.builtin.command: find {{ kube_proxy_kubeconfig_path }} -name "{{ kube_proxy_kubeconfig_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003140
+    - name: CNTR-K8-003140 | kube_proxy_kubeconfig_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003140 | kube_proxy_kubeconfig_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003140 | kube_proxy_kubeconfig_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ kube_proxy_kubeconfig_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003150 | medium | The Kubernetes Kube Proxy Kubeconfig must be owned
+    by root.
+  when: rule_cntr_k8_003150
+  tags:
+    - rule_CNTR_K8_003150
+    - control_plane
+    - proxy
+  ansible.builtin.file:
+    path: '{{ kube_proxy_kubeconfig_path }}'
+    state: file
+    recurse: false
+    owner: root
+    group: root
+- name: CNTR-K8-003160 | medium | The Kubernetes Kubelet certificate authority file
+    must have file permissions set to 644 or more restrictive.
+  when: rule_cntr_k8_003160
+  tags:
+    - rule_CNTR_K8_003160
+    - control_plane
+  block:
+    - name: CNTR-K8-003160 | kubelet_certificate_authority_path | Find file permissions
+      ansible.builtin.command: find {{ kubelet_certificate_authority_path }} -name
+        "{{ kubelet_certificate_authority_path | basename }}" -type f -exec stat -c
+        %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003160
+    - name: CNTR-K8-003160 | kubelet_certificate_authority_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003160 | kubelet_certificate_authority_path | Assert permissions
+        are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003160 | kubelet_certificate_authority_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ kubelet_certificate_authority_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003170 | medium | The Kubernetes Kubelet certificate authority must
+    be owned by root.
+  when: rule_cntr_k8_003170
+  tags:
+    - rule_CNTR_K8_003170
+    - control_plane
+  ansible.builtin.file:
+    path: '{{ kubelet_certificate_authority_path }}'
+    state: file
+    recurse: false
+    owner: root
+    group: root
+- name: CNTR-K8-003180 | medium | The Kubernetes component PKI must be owned by root.
+  when: rule_cntr_k8_003180
+  tags:
+    - rule_CNTR_K8_003180
+    - worker
+  ansible.builtin.file:
+    path: '{{ pki_dir }}'
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+- name: CNTR-K8-003190 | medium | The Kubernetes kubelet kubeconfig must have file
+    permissions set to 644 or more restrictive.
+  when: rule_cntr_k8_003190
+  tags:
+    - rule_CNTR_K8_003190
+    - worker
+  block:
+    - name: CNTR-K8-003190 | kubelet_kubeconfig_path | Find file permissions
+      ansible.builtin.command: find {{ kubelet_kubeconfig_path }} -name "{{ kubelet_kubeconfig_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003190
+    - name: CNTR-K8-003190 | kubelet_kubeconfig_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003190 | kubelet_kubeconfig_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003190 | kubelet_kubeconfig_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ kubelet_kubeconfig_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003200 | medium | The Kubernetes kubelet kubeconfig must be owned
+    by root.
+  when: rule_cntr_k8_003200
+  tags:
+    - rule_CNTR_K8_003200
+    - worker
+  ansible.builtin.file:
+    path: '{{ kubelet_kubeconfig_path }}'
+    state: file
+    recurse: false
+    owner: root
+    group: root
+- name: CNTR-K8-003210 | medium | The Kubernetes Kubelet service file must be owned
+    by root.
+  when: rule_cntr_k8_003210
+  tags:
+    - rule_CNTR_K8_003210
+    - worker
+  ansible.builtin.file:
+    path: '{{ kubelet_service_path }}'
+    state: file
+    recurse: false
+    owner: root
+    group: root
+- name: CNTR-K8-003220 | medium | The Kubernetes Kubelet service file must have file
+    permissions set to 644 or more restrictive.
+  when: rule_cntr_k8_003220
+  tags:
+    - rule_CNTR_K8_003220
+    - worker
+  block:
+    - name: CNTR-K8-003220 | kubelet_service_path | Find file permissions
+      ansible.builtin.command: find {{ kubelet_service_path }} -name "{{ kubelet_service_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003220
+    - name: CNTR-K8-003220 | kubelet_service_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003220 | kubelet_service_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003220 | kubelet_service_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ kubelet_service_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003230 | medium | The Kubernetes kubelet config must have file permissions
+    set to 644 or more restrictive.
+  when: rule_cntr_k8_003230
+  tags:
+    - rule_CNTR_K8_003230
+    - worker
+  block:
+    - name: CNTR-K8-003230 | kubelet_config_path | Find file permissions
+      ansible.builtin.command: find {{ kubelet_config_path }} -name "{{ kubelet_config_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003230
+    - name: CNTR-K8-003230 | kubelet_config_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003230 | kubelet_config_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003230 | kubelet_config_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ kubelet_config_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003240 | medium | The Kubernetes kubelet config must be owned by root.
+  when: rule_cntr_k8_003240
+  tags:
+    - rule_CNTR_K8_003240
+    - worker
+  ansible.builtin.file:
+    path: '{{ kubelet_config_path }}'
+    state: file
+    recurse: false
+    owner: root
+    group: root
+- name: CNTR-K8-003250 | medium | The Kubernetes API Server manifest must have file
+    permissions set to 644 or more restrictive.
+  when: rule_cntr_k8_003250
+  tags:
+    - rule_CNTR_K8_003250
+    - control_plane
+  block:
+    - name: CNTR-K8-003250 | api_server_manifest_path | Find file permissions
+      ansible.builtin.command: find {{ api_server_manifest_path }} -name "{{ api_server_manifest_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003250
+    - name: CNTR-K8-003250 | api_server_manifest_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003250 | api_server_manifest_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003250 | api_server_manifest_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ api_server_manifest_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003260 | medium | The Kubernetes etcd must have file permissions set
+    to 644 or more restrictive.
+  when: rule_cntr_k8_003260
+  tags:
+    - rule_CNTR_K8_003260
+    - control_plane
+  block:
+    - name: CNTR-K8-003260 | etcd_dir | Find file permissions
+      ansible.builtin.command: find {{ etcd_dir }} -name "*" -type f -exec stat -c
+        %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003260
+    - name: CNTR-K8-003260 | etcd_dir | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003260 | etcd_dir | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - permission_output.stdout_lines|list|map("int")|min <= 644
+    - name: CNTR-K8-003260 | etcd_dir | Set file permissions
+      ansible.builtin.file:
+        path: '{{ etcd_dir }}'
+        mode: '644'
+        state: directory
+        recurse: true
+- name: CNTR-K8-003270 | medium | The Kubernetes admin kubeconfig must have file permissions
+    set to 644 or more restrictive.
+  when: rule_cntr_k8_003270
+  tags:
+    - rule_CNTR_K8_003270
+    - control_plane
+  block:
+    - name: CNTR-K8-003270 | admin_kubeconfig_path | Find file permissions
+      ansible.builtin.command: find {{ admin_kubeconfig_path }} -name "{{ admin_kubeconfig_path
+        | basename }}" -type f -exec stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003270
+    - name: CNTR-K8-003270 | admin_kubeconfig_path | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003270 | admin_kubeconfig_path | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - true
+    - name: CNTR-K8-003270 | admin_kubeconfig_path | Set file permissions
+      ansible.builtin.file:
+        path: '{{ admin_kubeconfig_path }}'
+        mode: '644'
+        state: file
+        recurse: false
+- name: CNTR-K8-003280 | medium | Kubernetes API Server audit logs must be enabled.
+  when: rule_cntr_k8_003280
+  tags:
+    - rule_CNTR_K8_003280
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: "^(\\s+- --audit-policy-file=(?!.*log file\n                         \
+      \   directory.*)$)"
+    line: "\\1,log file\n                            directory"
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-003290 | medium | The Kubernetes API Server must be set to audit log
+    max size.
+  when: rule_cntr_k8_003290
+  tags:
+    - rule_CNTR_K8_003290
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --audit-log-maxsize=(?!.*100.*)$)
+    line: \1,100
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-003300 | medium | The Kubernetes API Server must be set to audit log
+    maximum backup.
+  when: rule_cntr_k8_003300
+  tags:
+    - rule_CNTR_K8_003300
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --audit-log-maxbackup=(?!.*10.*)$)
+    line: \1,10
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-003310 | medium | The Kubernetes API Server audit log retention must
+    be set.
+  when: rule_cntr_k8_003310
+  tags:
+    - rule_CNTR_K8_003310
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --audit-log-maxage=(?!.*30.*)$)
+    line: \1,30
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-003320 | medium | The Kubernetes API Server audit log path must be
+    set.
+  when: rule_cntr_k8_003320
+  tags:
+    - rule_CNTR_K8_003320
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --audit-log-path=(?!.*null.*)$)
+    line: \1,null
+    insertafter: ^\s+- etcd$
+- name: CNTR-K8-003330 | medium | The Kubernetes PKI CRT must have file permissions
+    set to 644 or more restrictive.
+  when: rule_cntr_k8_003330
+  tags:
+    - rule_CNTR_K8_003330
+    - worker
+  block:
+    - name: CNTR-K8-003330 | pki_crt_dir | Find file permissions
+      ansible.builtin.command: find {{ pki_crt_dir }} -name "*.crt" -type f -exec
+        stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003330
+    - name: CNTR-K8-003330 | pki_crt_dir | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003330 | pki_crt_dir | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - permission_output.stdout_lines|list|map("int")|min <= 644
+    - name: CNTR-K8-003330 | pki_crt_dir | Set file permissions
+      ansible.builtin.file:
+        path: '{{ pki_crt_dir }}'
+        mode: '644'
+        state: directory
+        recurse: true
+- name: CNTR-K8-003340 | medium | The Kubernetes PKI keys must have file permissions
+    set to 600 or more restrictive.
+  when: rule_cntr_k8_003340
+  tags:
+    - rule_CNTR_K8_003340
+    - worker
+  block:
+    - name: CNTR-K8-003340 | pki_keys_dir | Find file permissions
+      ansible.builtin.command: find {{ pki_keys_dir }} -name "*.key" -type f -exec
+        stat -c %a {} \;
+      register: permission_output
+      check_mode: 'no'
+      when: rule_cntr_k8_003340
+    - name: CNTR-K8-003340 | pki_keys_dir | Debug
+      ansible.builtin.debug:
+        msg: '{{ permission_output }}'
+    - name: CNTR-K8-003340 | pki_keys_dir | Assert permissions are correct
+      ansible.builtin.assert:
+        that:
+          - permission_output.stdout_lines|list|map("int")|min <= 600
+    - name: CNTR-K8-003340 | pki_keys_dir | Set file permissions
+      ansible.builtin.file:
+        path: '{{ pki_keys_dir }}'
+        mode: '600'
+        state: directory
+        recurse: true
+- name: CNTR-K8-003350 | medium | The Kubernetes API Server must prohibit communication
+    using TLS version 1.0 and 1.1, and SSL 2.0 and 3.0.
+  when: rule_cntr_k8_003350
+  tags:
+    - rule_CNTR_K8_003350
+    - control_plane
+  ansible.builtin.lineinfile:
+    dest: '{{ api_server_manifest_path }}'
+    backup: true
+    backrefs: true
+    state: present
+    regexp: ^(\s+- --tls-min-version=(?!.*VersionTLS12.*)$)
+    line: \1,VersionTLS12
+    insertafter: ^\s+- etcd$

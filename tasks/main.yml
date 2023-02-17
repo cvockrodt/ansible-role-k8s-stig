@@ -1,0 +1,35 @@
+---
+# tasks file for k8s_stig
+- name: Gather distribution info
+  ansible.builtin.setup:
+    gather_subset: distribution,!all,!min
+  when:
+    - ansible_distribution is not defined
+  tags:
+    - always
+
+- name: Check OS system
+  ansible.builtin.assert:
+    that:
+      - ansible_system == 'Linux'
+    success_msg: "{{ ansible_system }} is the detected system."
+    fail_msg: This role can only be run against Linux. {{ ansible_system }} is not supported.
+  tags:
+    - always
+
+- name: Check ansible version
+  ansible.builtin.assert:
+    that: ansible_version.full is version_compare(min_ansible_version, '>=')
+    msg: You must use Ansible {{ min_ansible_version }} or greater
+  tags:
+    - always
+
+- name: Execute the generated STIG Components tasks
+  ansible.builtin.import_tasks: stig.yml
+  tags:
+    - generated
+
+- name: Execute the manually created STIG Components tasks
+  ansible.builtin.import_tasks: extras.yml
+  tags:
+    - manual

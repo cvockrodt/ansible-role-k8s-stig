@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: k8s_stig
+  author: cvockrodt
+  namespace: cvockrodt
+  description: Ansible playbook with a role to remediate a Kubernetes cluster based on the Kubernetes DISA STIG v1r8
+  license: MIT
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: EL
+      versions:
+        - all
+
+  galaxy_tags:
+    - system
+    - security
+    - stig
+    - hardening
+    - kubernetes
+    - benchmark
+
+dependencies: []

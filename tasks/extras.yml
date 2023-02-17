@@ -1,0 +1,147 @@
+- name: CNTR-K8-000400 | medium | Kubernetes Worker Nodes must not have sshd service
+    running.
+  when: rule_cntr_k8_000400
+  tags:
+    - rule_CNTR_K8_000400
+    - control_plane
+  ansible.builtin.debug:
+    msg: 'To stop the sshd service, run the command: systemctl stop sshd Note: If
+      access to the worker node is through an SSH session, it is important to realize
+      there are two requirements for disabling and stopping the sshd service and they
+      should be done during the same SSH session. Disabling the service must be performed
+      first and then the service stopped to guarantee both settings can be made if
+      the session is interrupted.'
+- name: CNTR-K8-000410 | medium | Kubernetes Worker Nodes must not have the sshd service
+    enabled.
+  when: rule_cntr_k8_000410
+  tags:
+    - rule_CNTR_K8_000410
+    - control_plane
+  ansible.builtin.debug:
+    msg: 'To disable the sshd service, run the command: chkconfig sshd off Note: If
+      access to the worker node is through an SSH session, it is important to realize
+      there are two requirements for disabling and stopping the sshd service that
+      must be done during the same SSH session. Disabling the service must be performed
+      first and then the service stopped to guarantee both settings can be made if
+      the session is interrupted.'
+- name: CNTR-K8-000420 | medium | Kubernetes dashboard must not be enabled.
+  when: rule_cntr_k8_000420
+  tags:
+    - rule_CNTR_K8_000420
+    - control_plane
+  ansible.builtin.debug:
+    msg: 'Delete the Kubernetes dashboard deployment with the following command: kubectl
+      delete deployment kubernetes-dashboard --namespace=kube-system'
+- name: CNTR-K8-000290 | high | User-managed resources must be created in dedicated
+    namespaces.
+  when: rule_cntr_k8_000290
+  tags:
+    - rule_CNTR_K8_000290
+    - control_plane
+    - kubectl
+  ansible.builtin.debug:
+    msg: Move any user-managed resources from the default, kube-public, and kube-node-lease
+      namespaces to user namespaces.
+- name: CNTR-K8-002700 | medium | Kubernetes must remove old components after updated
+    versions have been installed.
+  when: rule_cntr_k8_002700
+  tags:
+    - rule_CNTR_K8_002700
+    - control_plane
+    - kubectl
+  ansible.builtin.debug:
+    msg: 'Remove any old pods that are using older images. On the Control Plane, run
+      the command: kubectl delete pod podname (Note: "podname" is the name of the
+      pod to delete.)'
+- name: CNTR-K8-000950 | medium | The Kubernetes etcd must enforce ports, protocols,
+    and services (PPS) that adhere to the Ports, Protocols, and Services Management
+    Category Assurance List (PPSM CAL).
+  when: rule_cntr_k8_000950
+  tags:
+    - rule_CNTR_K8_000950
+    - control_plane
+  ansible.builtin.debug:
+    msg: Amend any system documentation requiring revision. Update Kubernetes etcd
+      manifest and namespace PPS configuration to comply with PPSM CAL.
+- name: CNTR-K8-000960 | medium | The Kubernetes cluster must use non-privileged host
+    ports for user pods.
+  when: rule_cntr_k8_000960
+  tags:
+    - rule_CNTR_K8_000960
+    - control_plane
+    - kubectl
+  ansible.builtin.debug:
+    msg: For any of the pods that are using host-privileged ports, reconfigure the
+      pod to use a service to map a host non-privileged port to the pod port or reconfigure
+      the image to use non-privileged ports.
+- name: CNTR-K8-001160 | high | Secrets in Kubernetes must not be stored as environment
+    variables.
+  when: rule_cntr_k8_001160
+  tags:
+    - rule_CNTR_K8_001160
+    - control_plane
+    - kubectl
+  ansible.builtin.debug:
+    msg: Any secrets stored as environment variables must be moved to the secret files
+      with the proper protections and enforcements or placed within a password vault.
+- name: CNTR-K8-000920 | medium | The Kubernetes API Server must enforce ports, protocols,
+    and services (PPS) that adhere to the Ports, Protocols, and Services Management
+    Category Assurance List (PPSM CAL).
+  when: rule_cntr_k8_000920
+  tags:
+    - rule_CNTR_K8_000920
+    - control_plane
+- name: CNTR-K8-001360 | medium | Kubernetes must separate user functionality.
+  when: rule_cntr_k8_001360
+  tags:
+    - rule_CNTR_K8_001360
+    - control_plane
+    - kubectl
+  ansible.builtin.debug:
+    msg: Move any user pods that are present in the Kubernetes system namespaces to
+      user specific namespaces.
+- name: CNTR-K8-000940 | medium | The Kubernetes Controllers must enforce ports, protocols,
+    and services (PPS) that adhere to the Ports, Protocols, and Services Management
+    Category Assurance List (PPSM CAL).
+  when: rule_cntr_k8_000940
+  tags:
+    - rule_CNTR_K8_000940
+    - control_plane
+  ansible.builtin.debug:
+    msg: Amend any system documentation requiring revision. Update Kubernetes Controller
+      manifest and namespace PPS configuration to comply with PPSM CAL.
+- name: CNTR-K8-000930 | medium | The Kubernetes Scheduler must enforce ports, protocols,
+    and services (PPS) that adhere to the Ports, Protocols, and Services Management
+    Category Assurance List (PPSM CAL).
+  when: rule_cntr_k8_000930
+  tags:
+    - rule_CNTR_K8_000930
+    - control_plane
+  ansible.builtin.debug:
+    msg: Amend any system documentation requiring revision. Update Kubernetes Scheduler
+      manifest and namespace PPS configuration to comply with the PPSM CAL.
+- name: CNTR-K8-002010 | high | Kubernetes must have a pod security policy set.
+  when: rule_cntr_k8_002010
+  tags:
+    - rule_CNTR_K8_002010
+    - control_plane
+    - kubectl
+  ansible.builtin.debug:
+    msg: 'From the Control Plane, save the following policy to a file called restricted.yml.
+      apiVersion: policy/v1beta1 kind: PodSecurityPolicy metadata: name: restricted
+      annotations: apparmor.security.beta.kubernetes.io/allowedProfileNames: ''runtime/default'',
+      seccomp.security.alpha.kubernetes.io/defaultProfileName: ''runtime/default'',
+      apparmor.security.beta.kubernetes.io/defaultProfileName: ''runtime/default''
+      spec: privileged: false # Required to prevent escalations to root. allowPrivilegeEscalation:
+      false # This is redundant with non-root + disallow privilege escalation, # but
+      we can provide it for defense in depth. requiredDropCapabilities: - ALL # Allow
+      core volume types. volumes: - ''configMap'' - ''emptyDir'' - ''projected'' -
+      ''secret'' - ''downwardAPI'' # Assume that persistentVolumes set up by the cluster
+      admin are safe to use. - ''persistentVolumeClaim'' hostNetwork: false hostIPC:
+      false hostPID: false runAsUser: # Require the container to run without root
+      privileges. rule: ''MustRunAsNonRoot'' seLinux: # This policy assumes the nodes
+      are using AppArmor rather than SELinux. rule: ''RunAsAny'' supplementalGroups:
+      rule: ''MustRunAs'' ranges: # Forbid adding the root group. - min: 1 max: 65535
+      fsGroup: rule: ''MustRunAs'' ranges: # Forbid adding the root group. - min:
+      1 max: 65535 readOnlyRootFilesystem: false To implement the policy, run the
+      command: kubectl create -f restricted.yml'
