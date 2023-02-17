@@ -13,7 +13,9 @@ Role Variables
 --------------
 
 Variables from defaults/main.yml
+
 | Variable | Default |
+| -------- | -------- |
 | kubelet_certificate_authority_path | /etc/kubernetes/pki/ca.crt |
 | kubelet_config_path | /var/lib/kubelet/config.yaml |
 | kubelet_service_path | /lib/systemd/system/kubelet.service.d/10-kubeadm.conf |
@@ -34,8 +36,6 @@ Variables from defaults/main.yml
 | api_server_audit_policy_path | /etc/kubernetes/audit-policy.yaml |
 | pod_security_policy_path | /etc/kubernetes/manifests/pod-security-policy.yaml |
 | admission_control_config_path | /etc/kubernetes/admission-control-config.yaml |
-
-
 
 Dependencies
 ------------
